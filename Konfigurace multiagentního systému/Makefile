@@ -17,11 +17,14 @@ test: $(TARGET)
 		outfile=$${infile%.in}.out; \
 		tmpout=$${infile%.in}.myout; \
 		echo "Running test with $$infile..."; \
+		start=$$(date +%s.%N); \
 		./$(TARGET) < $$infile > $$tmpout; \
+		end=$$(date +%s.%N); \
+		runtime=$$(echo "$$end - $$start" | bc); \
 		if diff -q $$outfile $$tmpout > /dev/null; then \
-			echo "  [OK] $$infile"; \
+			echo "  [OK] $$infile (Time: $$runtime s)"; \
 		else \
-			echo "  [FAIL] $$infile"; \
+			echo "  [FAIL] $$infile (Time: $$runtime s)"; \
 			diff -u $$outfile $$tmpout || true; \
 		fi; \
 	done
@@ -35,11 +38,14 @@ run: $(TARGET)
 		outfile=$(DATADIR)/$(PUB).out; \
 		tmpout=$(DATADIR)/$(PUB).myout; \
 		echo "Running test $(PUB)..."; \
+		start=$$(date +%s.%N); \
 		./$(TARGET) < $$infile > $$tmpout; \
+		end=$$(date +%s.%N); \
+		runtime=$$(echo "$$end - $$start" | bc); \
 		if diff -q $$outfile $$tmpout > /dev/null; then \
-			echo "  [OK] $(PUB)"; \
+			echo "  [OK] $(PUB) (Time: $$runtime s)"; \
 		else \
-			echo "  [FAIL] $(PUB)"; \
+			echo "  [FAIL] $(PUB) (Time: $$runtime s)"; \
 			diff -u $$outfile $$tmpout || true; \
 		fi; \
 	fi
